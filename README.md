@@ -3,7 +3,6 @@
 **Keep every opportunity moving.** JobTrack is a full-stack web app for organizing job applications, tracking interview progress, and seeing your job search at a glance.
 
 🌐 **Live app:** [job-application-tracker-dusky-kappa.vercel.app](https://job-application-tracker-dusky-kappa.vercel.app)<br>
-🔌 **Live API:** [job-application-tracker-production-fc4d.up.railway.app](https://job-application-tracker-production-fc4d.up.railway.app)
 
 ## About
 
