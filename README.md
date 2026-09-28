@@ -1,76 +1,134 @@
-# JobTrack
+# JobTrack — Job Application Tracker
 
-JobTrack keeps your job applications, interview stages, and next steps together. It includes a React dashboard and a Spring Boot REST API backed by MySQL.
+**Keep every opportunity moving.** JobTrack is a full-stack web app for organizing job applications, tracking interview progress, and seeing your job search at a glance.
+
+🌐 **Live app:** [job-application-tracker-dusky-kappa.vercel.app](https://job-application-tracker-dusky-kappa.vercel.app)<br>
+🔌 **Live API:** [job-application-tracker-production-fc4d.up.railway.app](https://job-application-tracker-production-fc4d.up.railway.app)
+
+## About
+
+JobTrack helps job seekers keep company and role details, application stages, dates, salary ranges, job links, and personal notes in one place. Create an account to get a private dashboard for your applications.
 
 ## Features
 
-- Register and sign in with BCrypt-encrypted passwords and JWT access tokens.
-- Create, view, edit, delete, search, and filter job applications.
-- Track company, position, location, employment type, status, date, salary, posting URL, and notes.
-- See application, interview, offer, and response-rate totals on the dashboard.
-- Keep each user's application data isolated to their authenticated account.
+- Account registration and login with JWT authentication.
+- BCrypt password hashing.
+- Add, view, edit, and delete applications.
+- Search applications by company, job title, or location.
+- Filter by application status and sort by application date.
+- Track **Applied**, **Interview**, **Offer**, and **Rejected** stages.
+- Dashboard summary for total applications, interviews, offers, and response rate.
+- Application details for company, position, location, employment type, date, salary range (for example, ₹3 LPA – ₹5 LPA), job URL, and notes.
+- User-specific data access: each account can access only its own applications.
+- Responsive React interface for desktop and mobile.
 
-## Requirements
+## Tech stack
 
-- Node.js 18+
-- Java 17+
-- Maven 3.8+
-- MySQL 8+
+| Area | Technologies |
+| --- | --- |
+| Frontend | React, JavaScript, HTML, CSS, Vite, Lucide |
+| Backend | Java 17+, Spring Boot, Spring Web, Spring Security, Spring Data JPA, Bean Validation |
+| Authentication | JWT, BCrypt |
+| Database | MySQL |
+| Hosting | Vercel (frontend), Railway (API and MySQL) |
+| Build tools | npm, Maven |
+
+## Architecture
+
+```text
+React app (Vercel)
+      │ HTTPS / JSON REST API
+      ▼
+Spring Boot API (Railway)
+      │ Spring Data JPA
+      ▼
+MySQL (Railway)
+```
 
 ## Run locally
 
-1. Start MySQL and create a database, or allow the configured connection to create `jobtrack`:
+### Requirements
 
-   ```sql
-   CREATE DATABASE jobtrack;
-   ```
+- Node.js 18 or newer
+- Java 17 or newer
+- Maven 3.8 or newer
+- MySQL 8 or newer
 
-2. Start the API:
+### 1. Create the database
 
-   ```powershell
-   cd backend
-   $env:DB_USERNAME = "root"
-   $env:DB_PASSWORD = "your-mysql-password"
-   mvn spring-boot:run
-   ```
+Start MySQL and create the project database:
 
-   The API runs at `http://localhost:8080`. Connection settings can be overridden with `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`. Set `JWT_SECRET` to a private, random value of at least 32 bytes outside local development.
+```sql
+CREATE DATABASE jobtrack;
+```
 
-3. In a second terminal, start the frontend:
+The backend uses Hibernate to create and update the application tables during local development.
 
-   ```powershell
-   cd frontend
-   npm install
-   npm run dev
-   ```
+### 2. Configure and start the backend
 
-   Open `http://localhost:5173`, then create an account. To point the frontend at a different API, set `VITE_API_URL` (defaults to `http://localhost:8080/api`).
+The backend reads `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`. Set your local MySQL credentials in your shell or in an ignored local configuration file; never commit real credentials.
+
+In PowerShell:
+
+```powershell
+cd backend
+$env:DB_USERNAME = "root"
+$env:DB_PASSWORD = "your-local-mysql-password"
+mvn spring-boot:run
+```
+
+The API starts at `http://localhost:8080`. For anything beyond local development, set `JWT_SECRET` to a private random value of at least 32 bytes.
+
+### 3. Start the frontend
+
+Open a second terminal:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) and register an account. The frontend uses `http://localhost:8080/api` by default; set `VITE_API_URL` if your API runs at a different address.
 
 ## REST API
 
-| Method | Endpoint | Authentication | Purpose |
+All application endpoints require an `Authorization: Bearer <token>` header. Register or log in to receive a token.
+
+| Method | Endpoint | Authentication | Description |
 | --- | --- | --- | --- |
-| `POST` | `/api/auth/register` | No | Create an account |
-| `POST` | `/api/auth/login` | No | Sign in and receive a JWT |
-| `GET` | `/api/applications` | Bearer JWT | List the signed-in user's applications |
-| `POST` | `/api/applications` | Bearer JWT | Create an application |
-| `PUT` | `/api/applications/{id}` | Bearer JWT | Update an application |
-| `DELETE` | `/api/applications/{id}` | Bearer JWT | Delete an application |
+| `POST` | `/api/auth/register` | No | Register an account |
+| `POST` | `/api/auth/login` | No | Log in and receive a JWT |
+| `GET` | `/api/applications` | Yes | List your applications |
+| `POST` | `/api/applications` | Yes | Create an application |
+| `PUT` | `/api/applications/{id}` | Yes | Update your application |
+| `DELETE` | `/api/applications/{id}` | Yes | Delete your application |
 
-Application statuses are `APPLIED`, `INTERVIEW`, `OFFER`, and `REJECTED` in API requests. Include the returned token as `Authorization: Bearer <token>` on protected endpoints.
+API status values are `APPLIED`, `INTERVIEW`, `OFFER`, and `REJECTED`.
 
-## Configuration
+## Environment variables
 
-The API reads configuration from environment variables:
-
-| Variable | Default | Description |
+| Variable | Used by | Description |
 | --- | --- | --- |
-| `DB_URL` | Local MySQL `jobtrack` database | JDBC connection URL |
-| `DB_USERNAME` | `root` | MySQL username |
-| `DB_PASSWORD` | Empty | MySQL password |
-| `JWT_SECRET` | Development-only placeholder | HMAC signing secret; replace for deployments |
-| `JWT_EXPIRATION_MS` | `86400000` | Token lifetime in milliseconds |
-| `PORT` | `8080` | API port |
-| `VITE_API_URL` | `http://localhost:8080/api` | Frontend API base URL |
+| `DB_URL` | Backend | MySQL JDBC connection URL |
+| `DB_USERNAME` | Backend | MySQL username |
+| `DB_PASSWORD` | Backend | MySQL password |
+| `JWT_SECRET` | Backend | Secret used to sign JWTs; use a strong, private value in production |
+| `JWT_EXPIRATION_MS` | Backend | Token lifetime in milliseconds; defaults to `86400000` |
+| `PORT` | Backend | HTTP port; defaults to `8080` |
+| `APP_CORS_ALLOWED_ORIGIN` | Backend | Allowed frontend origin; configure this to the deployed Vercel URL |
+| `VITE_API_URL` | Frontend | API base URL, including `/api` |
 
-Hibernate updates the schema automatically for local development. For production, use managed schema migrations and HTTPS, configure a strong secret, and store secrets outside source control.
+On Railway, configure database credentials and the JWT secret as service variables. On Vercel, set `VITE_API_URL` to the deployed API URL ending in `/api`. Never put secrets in frontend variables or commit local credentials.
+
+## Repository layout
+
+```text
+backend/     Spring Boot REST API and MySQL persistence
+frontend/    React application
+README.md    Project documentation
+```
+
+## License
+
+No license has been specified yet. All rights remain with the repository owner unless a license is added.
