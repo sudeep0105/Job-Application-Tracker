@@ -44,7 +44,14 @@ Spring Boot API (Railway)
 MySQL (Railway)
 ```
 
-## Run locally
+## How to run locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/jobtrack.git
+cd jobtrack
+```
 
 ### Requirements
 
@@ -53,7 +60,7 @@ MySQL (Railway)
 - Maven 3.8 or newer
 - MySQL 8 or newer
 
-### 1. Create the database
+### 2. Create the database
 
 Start MySQL and create the project database:
 
@@ -63,7 +70,7 @@ CREATE DATABASE jobtrack;
 
 The backend uses Hibernate to create and update the application tables during local development.
 
-### 2. Configure and start the backend
+### 3. Configure and start the backend
 
 The backend reads `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`. Set your local MySQL credentials in your shell or in an ignored local configuration file; never commit real credentials.
 
@@ -78,7 +85,7 @@ mvn spring-boot:run
 
 The API starts at `http://localhost:8080`. For anything beyond local development, set `JWT_SECRET` to a private random value of at least 32 bytes.
 
-### 3. Start the frontend
+### 4. Start the frontend
 
 Open a second terminal:
 
