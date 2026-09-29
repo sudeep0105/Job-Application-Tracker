@@ -28,6 +28,9 @@ function App() {
   const [form, setForm] = useState(initialForm)
   const [saving, setSaving] = useState(false)
   const [menuId, setMenuId] = useState(null)
+  const [menuPosition, setMenuPosition] = useState(null)
+  const menuTriggerRef = useRef(null)
+  const rowMenuRef = useRef(null)
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   const profileMenuRef = useRef(null)
 
@@ -64,6 +67,43 @@ function App() {
       document.removeEventListener('keydown', closeMenu)
     }
   }, [profileMenuOpen])
+
+  useEffect(() => {
+    if (menuId === null) return undefined
+
+    function updateMenuPosition() {
+      const bounds = menuTriggerRef.current?.getBoundingClientRect()
+      if (!bounds) return
+
+      const menuWidth = 160
+      const menuHeight = 120
+      const below = bounds.bottom + menuHeight + 4 <= window.innerHeight - 8
+      setMenuPosition({
+        left: Math.max(8, Math.min(bounds.right - menuWidth, window.innerWidth - menuWidth - 8)),
+        top: Math.max(8, below ? bounds.bottom + 4 : bounds.top - menuHeight - 4),
+      })
+    }
+
+    function closeMenu(event) {
+      if (event.type === 'keydown' && event.key !== 'Escape') return
+      if (event.type === 'pointerdown'
+        && (menuTriggerRef.current?.contains(event.target) || rowMenuRef.current?.contains(event.target))) return
+      setMenuId(null)
+      setMenuPosition(null)
+    }
+
+    updateMenuPosition()
+    window.addEventListener('scroll', updateMenuPosition, true)
+    window.addEventListener('resize', updateMenuPosition)
+    document.addEventListener('pointerdown', closeMenu)
+    document.addEventListener('keydown', closeMenu)
+    return () => {
+      window.removeEventListener('scroll', updateMenuPosition, true)
+      window.removeEventListener('resize', updateMenuPosition)
+      document.removeEventListener('pointerdown', closeMenu)
+      document.removeEventListener('keydown', closeMenu)
+    }
+  }, [menuId])
 
   function logout() {
     setProfileMenuOpen(false)
@@ -110,6 +150,8 @@ function App() {
     setForm(application ? { ...initialForm, ...application, appliedDate: application.appliedDate || '' } : initialForm)
     setModal(application ? { id: application.id } : {})
     setMenuId(null)
+    setMenuPosition(null)
+    menuTriggerRef.current = null
     setError('')
   }
 
@@ -117,11 +159,27 @@ function App() {
     setForm({ ...initialForm, ...application, appliedDate: application.appliedDate || '' })
     setModal({ id: application.id, readOnly: true })
     setMenuId(null)
+    setMenuPosition(null)
+    menuTriggerRef.current = null
+  }
+
+  function toggleApplicationMenu(event, id) {
+    if (menuId === id) {
+      setMenuId(null)
+      setMenuPosition(null)
+      menuTriggerRef.current = null
+      return
+    }
+
+    menuTriggerRef.current = event.currentTarget
+    setMenuId(id)
   }
 
   async function deleteApplication(id) {
     if (!window.confirm('Delete this application? This action cannot be undone.')) return
     setMenuId(null)
+    setMenuPosition(null)
+    menuTriggerRef.current = null
     try {
       await jobsApi.remove(id)
       setApplications((current) => current.filter((application) => application.id !== id))
@@ -194,7 +252,7 @@ function App() {
             <div className="toolbar"><div className="search-box"><Search size={16} /><input aria-label="Search applications" placeholder="Search company or role..." value={query} onChange={(e) => setQuery(e.target.value)} /></div><div className="filter-wrap"><Filter size={15} /><select aria-label="Filter by status" value={filter} onChange={(e) => setFilter(e.target.value)}><option>All applications</option>{stages.map((stage) => <option key={stage}>{stage}</option>)}</select><ChevronDown size={14} /></div><button className="sort-button" onClick={() => setNewestFirst((value) => !value)}><ArrowDownUp size={15} /> {newestFirst ? 'Newest' : 'Oldest'}</button></div>
             <div className="table-wrap"><table><thead><tr><th>COMPANY & ROLE</th><th>STATUS</th><th>DATE APPLIED</th><th>LOCATION</th><th /></tr></thead>
               <tbody>{loading ? <tr><td colSpan="5"><div className="empty-state"><span className="loader" /> Loading your applications...</div></td></tr>
-                : filteredApplications.length ? filteredApplications.map((app) => <tr key={app.id}><td><div className="company-cell"><span className={`company-logo logo-${(app.company || 'x').charCodeAt(0) % 6}`}>{(app.company || '?').slice(0, 1).toUpperCase()}</span><span><strong>{app.company}</strong><small>{app.position}</small></span></div></td><td><span className={`status-pill ${stageClass(app.status)}`}><i />{app.status}</span></td><td className="date-cell">{app.appliedDate ? new Date(`${app.appliedDate}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</td><td className="location-cell">{app.location || '—'}</td><td className="row-action"><button className="icon-button" aria-label={`Actions for ${app.company}`} onClick={() => setMenuId(menuId === app.id ? null : app.id)}><MoreHorizontal size={19} /></button>{menuId === app.id && <div className="row-menu"><button onClick={() => openDetails(app)}>View details</button><button onClick={() => openForm(app)}>Edit application</button><button className="danger-action" onClick={() => deleteApplication(app.id)}>Delete application</button></div>}</td></tr>)
+                : filteredApplications.length ? filteredApplications.map((app) => <tr key={app.id}><td><div className="company-cell"><span className={`company-logo logo-${(app.company || 'x').charCodeAt(0) % 6}`}>{(app.company || '?').slice(0, 1).toUpperCase()}</span><span><strong>{app.company}</strong><small>{app.position}</small></span></div></td><td><span className={`status-pill ${stageClass(app.status)}`}><i />{app.status}</span></td><td className="date-cell">{app.appliedDate ? new Date(`${app.appliedDate}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</td><td className="location-cell">{app.location || '—'}</td><td className="row-action"><button className="icon-button" aria-label={`Actions for ${app.company}`} aria-expanded={menuId === app.id} aria-haspopup="menu" onClick={(event) => toggleApplicationMenu(event, app.id)} ref={menuId === app.id ? menuTriggerRef : null}><MoreHorizontal size={19} /></button>{menuId === app.id && <div className="row-menu" role="menu" ref={rowMenuRef} style={menuPosition}><button role="menuitem" onClick={() => openDetails(app)}>View details</button><button role="menuitem" onClick={() => openForm(app)}>Edit application</button><button className="danger-action" role="menuitem" onClick={() => deleteApplication(app.id)}>Delete application</button></div>}</td></tr>)
                   : <tr><td colSpan="5"><div className="empty-state"><span className="empty-icon"><BriefcaseBusiness size={21} /></span><strong>{query || filter !== 'All applications' ? 'No matching applications' : 'Your next opportunity starts here'}</strong><span>{query || filter !== 'All applications' ? 'Try adjusting your search or filters.' : 'Add your first application and keep the momentum going.'}</span>{!query && filter === 'All applications' && <button className="button button-primary empty-add" onClick={() => openForm()}><Plus size={15} /> Add an application</button>}</div></td></tr>}
               </tbody></table></div>
             <div className="panel-footer"><span>Showing <strong>{filteredApplications.length}</strong> of <strong>{applications.length}</strong> applications</span><span className="footer-note"><Clock3 size={13} /> Every step counts</span></div>
