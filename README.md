@@ -49,8 +49,8 @@ MySQL (Railway)
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/jobtrack.git
-cd jobtrack
+git clone https://github.com/sudeep0105/Job-Application-Tracker.git
+cd Job-Application-Tracker
 ```
 
 ### Requirements
