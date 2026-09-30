@@ -25,7 +25,7 @@
 | Database | MySQL |
 | Build tools | npm, Maven |
 
-## Run locally
+## How to Run locally
 
 These steps use Windows PowerShell. You will need:
 
