@@ -2,6 +2,7 @@
 
 **Keep every opportunity moving.** JobTrack helps you organize job applications, track interview progress, and see your job search at a glance. Create an account to manage your applications in a private dashboard.
 
+
 ## Features
 
 - Register and log in with JWT authentication and BCrypt password hashing.
