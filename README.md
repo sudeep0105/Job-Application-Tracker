@@ -67,7 +67,7 @@ Replace `your-local-mysql-password` with the password for your local MySQL user.
 
 ### 4. Start the frontend
 
-Open a second Command Prompt window and change to the repository folder. If the window starts in a different folder, use `cd /d C:\path\to\Job-Application-Tracker` first. Then run:
+Open a second Command Prompt from the repository folder. If the window starts in a different folder, use `cd /d C:\path\to\Job-Application-Tracker` first. Then run:
 
 ```cmd
 cd frontend
