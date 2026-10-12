@@ -67,7 +67,7 @@ Replace `your-local-mysql-password` with the password for your local MySQL user.
 
 ### 4. Start the frontend
 
-Open a second Command Prompt from the repository folder. Then run:
+Open a second Command Prompt from the repository folder, Then run:
 
 ```cmd
 cd frontend
