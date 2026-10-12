@@ -25,7 +25,7 @@
 
 ## How to Run locally
 
-These steps use Windows PowerShell. You will need:
+These steps use Windows Command Prompt (CMD). You will need:
 
 - Git
 - Node.js 18 or newer (includes npm)
@@ -35,9 +35,9 @@ These steps use Windows PowerShell. You will need:
 
 ### 1. Clone the repository
 
-Open PowerShell and run:
+Open Command Prompt and run:
 
-```powershell
+```cmd
 git clone https://github.com/sudeep0105/Job-Application-Tracker.git
 cd Job-Application-Tracker
 ```
@@ -54,23 +54,23 @@ The backend creates and updates the application tables when it starts.
 
 ### 3. Start the backend
 
-In PowerShell, from the repository folder, run:
+In Command Prompt, from the repository folder, run:
 
-```powershell
+```cmd
 cd backend
-$env:DB_USERNAME = "root"
-$env:DB_PASSWORD = "your-local-mysql-password"
+set DB_USERNAME=root
+set DB_PASSWORD=your-local-mysql-password
 mvn spring-boot:run
 ```
 
-Replace `your-local-mysql-password` with the password for your local MySQL user. If that user has no password, use `$env:DB_PASSWORD = ""`. The API will start at `http://localhost:8080`. Keep this terminal open.
+Replace `your-local-mysql-password` with the password for your local MySQL user. If that user has no password, run `set DB_PASSWORD=` instead. These environment variables apply only to this Command Prompt window. The API will start at `http://localhost:8080`. Keep this window open.
 
 ### 4. Start the frontend
 
-Open a second PowerShell window, go to the folder where you cloned the repository, and run:
+Open a second Command Prompt window and change to the repository folder. If the window starts in a different folder, use `cd /d C:\path\to\Job-Application-Tracker` first. Then run:
 
-```powershell
-cd Job-Application-Tracker\frontend
+```cmd
+cd frontend
 npm install
 npm run dev
 ```
