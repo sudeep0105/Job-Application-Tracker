@@ -54,7 +54,7 @@ The backend creates and updates the application tables when it starts.
 
 ### 3. Start the backend
 
-In Command Prompt, from the repository folder, run:
+In Command Prompt from the repository folder, run:
 
 ```cmd
 cd backend
