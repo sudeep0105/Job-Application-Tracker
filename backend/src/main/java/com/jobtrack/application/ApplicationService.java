@@ -32,7 +32,9 @@ public class ApplicationService {
         JobApplication application = new JobApplication(
                 request.company().trim(), request.position().trim(), request.location(),
                 request.employmentType(), request.status(), request.appliedDate(), request.salary(),
-                request.jobUrl(), request.notes(), user);
+                request.jobUrl(), request.recruiterName(), request.recruiterEmail(),
+                request.recruiterPhone(), request.resumeVersion(), request.referralName(),
+                request.referralContact(), request.notes(), user);
         return ApplicationResponse.from(applications.save(application));
     }
 
@@ -40,7 +42,9 @@ public class ApplicationService {
         JobApplication application = findApplication(id, email);
         application.update(request.company().trim(), request.position().trim(), request.location(),
                 request.employmentType(), request.status(), request.appliedDate(), request.salary(),
-                request.jobUrl(), request.notes());
+                request.jobUrl(), request.recruiterName(), request.recruiterEmail(),
+                request.recruiterPhone(), request.resumeVersion(), request.referralName(),
+                request.referralContact(), request.notes());
         return ApplicationResponse.from(application);
     }
 

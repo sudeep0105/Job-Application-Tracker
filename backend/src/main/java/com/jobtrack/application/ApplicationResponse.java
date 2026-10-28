@@ -12,6 +12,12 @@ public record ApplicationResponse(
         LocalDate appliedDate,
         String salary,
         String jobUrl,
+        String recruiterName,
+        String recruiterEmail,
+        String recruiterPhone,
+        String resumeVersion,
+        String referralName,
+        String referralContact,
         String notes
 ) {
     public static ApplicationResponse from(JobApplication application) {
@@ -25,6 +31,12 @@ public record ApplicationResponse(
                 application.getAppliedDate(),
                 application.getSalary(),
                 application.getJobUrl(),
+                application.getRecruiterName(),
+                application.getRecruiterEmail(),
+                application.getRecruiterPhone(),
+                application.getResumeVersion(),
+                application.getReferralName(),
+                application.getReferralContact(),
                 application.getNotes()
         );
     }

@@ -10,7 +10,9 @@ const stages = ['Applied', 'Interview', 'Offer', 'Rejected']
 const stageClass = (stage) => stage.toLowerCase()
 const initialForm = {
   company: '', position: '', location: '', employmentType: 'Full-time', status: 'Applied',
-  appliedDate: new Date().toISOString().slice(0, 10), salary: '', jobUrl: '', notes: '',
+  appliedDate: new Date().toISOString().slice(0, 10), salary: '', jobUrl: '',
+  recruiterName: '', recruiterEmail: '', recruiterPhone: '', resumeVersion: '',
+  referralName: '', referralContact: '', notes: '',
 }
 
 function App() {
@@ -271,6 +273,12 @@ function App() {
           <label>Date applied<input type="date" value={form.appliedDate} onChange={(e) => setForm({ ...form, appliedDate: e.target.value })} /></label>
           <label>Salary range<input maxLength="100" value={form.salary} onChange={(e) => setForm({ ...form, salary: e.target.value })} placeholder="e.g. ₹3 LPA – ₹5 LPA" /></label>
           <label>Job posting URL<input type="url" maxLength="500" value={form.jobUrl} onChange={(e) => setForm({ ...form, jobUrl: e.target.value })} placeholder="https://" /></label>
+          <label>Recruiter name<input maxLength="120" value={form.recruiterName} onChange={(e) => setForm({ ...form, recruiterName: e.target.value })} /></label>
+          <label>Recruiter email<input type="email" maxLength="160" value={form.recruiterEmail} onChange={(e) => setForm({ ...form, recruiterEmail: e.target.value })} /></label>
+          <label>Recruiter phone<input type="tel" maxLength="40" value={form.recruiterPhone} onChange={(e) => setForm({ ...form, recruiterPhone: e.target.value })} placeholder="e.g. +91 98765 43210" /></label>
+          <label>Resume version used<input maxLength="120" value={form.resumeVersion} onChange={(e) => setForm({ ...form, resumeVersion: e.target.value })} placeholder="e.g. Backend resume v3" /></label>
+          <label>Referral name<input maxLength="120" value={form.referralName} onChange={(e) => setForm({ ...form, referralName: e.target.value })} /></label>
+          <label>Referral contact<input maxLength="200" value={form.referralContact} onChange={(e) => setForm({ ...form, referralContact: e.target.value })} placeholder="Email, phone or LinkedIn" /></label>
           <label className="full-field">Notes<textarea rows="3" maxLength="2000" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Interview details, people to follow up with, or anything worth remembering..." /></label>
         </div></fieldset><div className="modal-actions">{modal.readOnly ? <button type="button" className="button button-primary" onClick={() => setModal(null)}>Done</button> : <><button type="button" className="button button-quiet" onClick={() => setModal(null)}>Cancel</button><button className="button button-primary" disabled={saving}>{saving ? 'Saving...' : <>{modal.id ? 'Save changes' : 'Save application'} <ArrowRight size={15} /></>}</button></>}</div></form>
       </section></div>}

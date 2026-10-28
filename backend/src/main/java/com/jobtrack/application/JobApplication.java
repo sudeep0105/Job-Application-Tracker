@@ -35,6 +35,24 @@ public class JobApplication {
     @Column(length = 500)
     private String jobUrl;
 
+    @Column(length = 120)
+    private String recruiterName;
+
+    @Column(length = 160)
+    private String recruiterEmail;
+
+    @Column(length = 40)
+    private String recruiterPhone;
+
+    @Column(length = 120)
+    private String resumeVersion;
+
+    @Column(length = 120)
+    private String referralName;
+
+    @Column(length = 200)
+    private String referralContact;
+
     @Column(length = 2000)
     private String notes;
 
@@ -46,7 +64,9 @@ public class JobApplication {
 
     public JobApplication(String company, String position, String location, String employmentType,
                           ApplicationStatus status, LocalDate appliedDate, String salary,
-                          String jobUrl, String notes, User user) {
+                          String jobUrl, String recruiterName, String recruiterEmail,
+                          String recruiterPhone, String resumeVersion, String referralName,
+                          String referralContact, String notes, User user) {
         this.company = company;
         this.position = position;
         this.location = location;
@@ -55,13 +75,21 @@ public class JobApplication {
         this.appliedDate = appliedDate;
         this.salary = salary;
         this.jobUrl = jobUrl;
+        this.recruiterName = recruiterName;
+        this.recruiterEmail = recruiterEmail;
+        this.recruiterPhone = recruiterPhone;
+        this.resumeVersion = resumeVersion;
+        this.referralName = referralName;
+        this.referralContact = referralContact;
         this.notes = notes;
         this.user = user;
     }
 
     public void update(String company, String position, String location, String employmentType,
                        ApplicationStatus status, LocalDate appliedDate, String salary,
-                       String jobUrl, String notes) {
+                       String jobUrl, String recruiterName, String recruiterEmail,
+                       String recruiterPhone, String resumeVersion, String referralName,
+                       String referralContact, String notes) {
         this.company = company;
         this.position = position;
         this.location = location;
@@ -70,6 +98,12 @@ public class JobApplication {
         this.appliedDate = appliedDate;
         this.salary = salary;
         this.jobUrl = jobUrl;
+        this.recruiterName = recruiterName;
+        this.recruiterEmail = recruiterEmail;
+        this.recruiterPhone = recruiterPhone;
+        this.resumeVersion = resumeVersion;
+        this.referralName = referralName;
+        this.referralContact = referralContact;
         this.notes = notes;
     }
 
@@ -82,5 +116,11 @@ public class JobApplication {
     public LocalDate getAppliedDate() { return appliedDate; }
     public String getSalary() { return salary; }
     public String getJobUrl() { return jobUrl; }
+    public String getRecruiterName() { return recruiterName; }
+    public String getRecruiterEmail() { return recruiterEmail; }
+    public String getRecruiterPhone() { return recruiterPhone; }
+    public String getResumeVersion() { return resumeVersion; }
+    public String getReferralName() { return referralName; }
+    public String getReferralContact() { return referralContact; }
     public String getNotes() { return notes; }
 }

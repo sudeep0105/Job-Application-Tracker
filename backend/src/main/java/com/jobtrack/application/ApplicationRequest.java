@@ -13,5 +13,11 @@ public record ApplicationRequest(
         LocalDate appliedDate,
         @Size(max = 100) String salary,
         @Size(max = 500) String jobUrl,
+        @Size(max = 120) String recruiterName,
+        @Size(max = 160) String recruiterEmail,
+        @Size(max = 40) String recruiterPhone,
+        @Size(max = 120) String resumeVersion,
+        @Size(max = 120) String referralName,
+        @Size(max = 200) String referralContact,
         @Size(max = 2000) String notes
 ) {}
