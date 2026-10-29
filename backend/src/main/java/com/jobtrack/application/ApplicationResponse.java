@@ -27,7 +27,7 @@ public record ApplicationResponse(
                 application.getPosition(),
                 application.getLocation(),
                 application.getEmploymentType(),
-                application.getStatus().name().substring(0, 1) + application.getStatus().name().substring(1).toLowerCase(),
+                statusLabel(application.getStatus()),
                 application.getAppliedDate(),
                 application.getSalary(),
                 application.getJobUrl(),
@@ -39,5 +39,13 @@ public record ApplicationResponse(
                 application.getReferralContact(),
                 application.getNotes()
         );
+    }
+
+    private static String statusLabel(ApplicationStatus status) {
+        return switch (status) {
+            case INTERVIEW, INTERVIEWED -> "Interviewed";
+            case OFFER, OFFERED -> "Offered";
+            default -> status.name().substring(0, 1) + status.name().substring(1).toLowerCase();
+        };
     }
 }

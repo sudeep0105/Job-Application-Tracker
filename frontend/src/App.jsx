@@ -6,8 +6,13 @@ import {
 } from 'lucide-react'
 import { authApi, jobsApi } from './api'
 
-const stages = ['Saved', 'Applied', 'Offered', 'Accepted', 'Rejected']
-const stageClass = (stage) => stage.toLowerCase()
+const stages = ['Saved', 'Applied', 'Interviewed', 'Offered', 'Accepted', 'Rejected']
+const stageClass = (stage) => ({
+  Saved: 'applied',
+  Interviewed: 'interview',
+  Offered: 'offer',
+  Accepted: 'offer',
+}[stage] || stage.toLowerCase())
 const initialForm = {
   company: '', position: '', location: '', employmentType: 'Full-time', status: 'Applied',
   appliedDate: new Date().toISOString().slice(0, 10), salary: '', jobUrl: '',
@@ -199,9 +204,9 @@ function App() {
 
   const counts = useMemo(() => ({
     total: applications.length,
-    interview: applications.filter((app) => app.status === 'Interview').length,
-    offers: applications.filter((app) => app.status === 'Offer').length,
-    responseRate: applications.length ? Math.round((applications.filter((app) => ['Interview', 'Offer', 'Rejected'].includes(app.status)).length / applications.length) * 100) : 0,
+    interview: applications.filter((app) => app.status === 'Interviewed' || app.status === 'Interview').length,
+    offers: applications.filter((app) => ['Offered', 'Offer', 'Accepted'].includes(app.status)).length,
+    responseRate: applications.length ? Math.round((applications.filter((app) => ['Interviewed', 'Interview', 'Offered', 'Offer', 'Accepted', 'Rejected'].includes(app.status)).length / applications.length) * 100) : 0,
   }), [applications])
 
   if (!token) {

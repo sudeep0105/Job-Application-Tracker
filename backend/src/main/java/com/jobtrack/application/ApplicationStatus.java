@@ -7,6 +7,7 @@ public enum ApplicationStatus {
     ACCEPTED,
     REJECTED,
     // Keep legacy values so existing applications remain readable.
+    INTERVIEWED,
     INTERVIEW,
     OFFER
 }
