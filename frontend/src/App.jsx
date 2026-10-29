@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { authApi, jobsApi } from './api'
 
-const stages = ['Applied', 'Interview', 'Offer', 'Rejected']
+const stages = ['Saved', 'Applied', 'Offered', 'Accepted', 'Rejected']
 const stageClass = (stage) => stage.toLowerCase()
 const initialForm = {
   company: '', position: '', location: '', employmentType: 'Full-time', status: 'Applied',
